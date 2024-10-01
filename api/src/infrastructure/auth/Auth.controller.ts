@@ -1,6 +1,6 @@
-import { GoogleAuthProvider } from "../providers/GoogleAuth.provider.ts";
-import { AuthMemoryRespository } from "../repositories/AuthMemory.repository.ts";
-import { AuthService } from "../services/Auth.service.ts";
+import { GoogleAuthProvider } from "./providers/GoogleAuth.provider.ts";
+import { AuthMemoryRespository } from "./repositories/AuthMemory.repository.ts";
+import { AuthService } from "./Auth.service.ts";
 import { Context } from "@oak/oak";
 
 const authService = new AuthService({

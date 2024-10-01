@@ -1,6 +1,6 @@
-import { User } from "../models/User.model.ts";
-import { AuthProvider } from "../providers/Auth.provider.interface.ts";
-import { AuthRespository } from "../repositories/Auth.repository.interface.ts";
+import { User } from "./models/User.model.ts";
+import { AuthProvider } from "./providers/Auth.provider.interface.ts";
+import { AuthRespository } from "./repositories/Auth.repository.interface.ts";
 
 export type AuthServiceProviders = {
   [key: string]: AuthProvider;
