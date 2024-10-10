@@ -12,7 +12,7 @@ const {
 
 // async function handler
 
-export class GithubAuth implements AuthProvider {
+export class GithubAuthProvider implements AuthProvider {
   constructor() {
     console.log(signIn, handleCallback, getSessionId, signOut);
   }

@@ -4,14 +4,16 @@ const conf = await load({
   export: true,
 });
 
-
 export default {
-
-
+  server: {
+    port: Number.parseInt(conf.PORT) || 8081,
+  },
   authClients: {
     google: {
       clientId: conf.GOOGLE_CLIENT_ID || "",
-      clientSecret: conf.GOOGLE_CLIENT_SECRET || ""
+      clientSecret: conf.GOOGLE_CLIENT_SECRET || "",
+      redirectUri: conf.GOOGLE_REDIRECT_URI || "",
+      scope: conf.GOOGLE_SCOPE || "",
     },
     facebook: {
       clientId: conf.FACEBOOK_CLIENT_ID || "",

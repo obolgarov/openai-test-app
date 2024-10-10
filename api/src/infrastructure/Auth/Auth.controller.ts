@@ -1,19 +1,21 @@
 import { GoogleAuthProvider } from "./providers/GoogleAuth.provider.ts";
-import { AuthMemoryRespository } from "./repositories/AuthMemory.repository.ts";
+import { GithubAuthProvider } from "./providers/GithubAuth.provider.ts";
+import { UserMemoryRespository } from "./repositories/UserMemory.repository.ts";
 import { AuthService } from "./Auth.service.ts";
 import { Context } from "@oak/oak";
 
 const authService = new AuthService({
   google: new GoogleAuthProvider(),
-}, new AuthMemoryRespository());
+  // github: new GithubAuthProvider(),
+}, new UserMemoryRespository());
 
 export class AuthController {
-  static async authenticate(ctx: Context) {
+  static async signIn(ctx: Context) {
     const data = await ctx.request.body.json();
     const { provider, token } = data as { provider: string; token: string };
 
     try {
-      const user = await authService.authenticate(provider, token);
+      const user = await authService.signIn(provider, token);
       if (user) {
         ctx.response.status = 200;
         ctx.response.body = user;

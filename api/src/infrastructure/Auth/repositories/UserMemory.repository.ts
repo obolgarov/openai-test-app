@@ -1,7 +1,7 @@
 import { User } from "../models/User.model.ts";
-import { AuthRespository } from "./AuthRepository.interface.ts";
+import { UserRespository } from "./User.repository.interface.ts";
 
-export class AuthMemoryRespository implements AuthRespository {
+export class UserMemoryRespository implements UserRespository {
   private users: User[] = [];
 
   async findUserByEmail(email: string): Promise<User | null> {
