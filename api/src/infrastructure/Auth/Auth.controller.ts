@@ -1,31 +1,51 @@
-import { GoogleAuthProvider } from "./providers/GoogleAuth.provider.ts";
-import { GithubAuthProvider } from "./providers/GithubAuth.provider.ts";
-import { UserMemoryRespository } from "./repositories/UserMemory.repository.ts";
-import { AuthService } from "./Auth.service.ts";
-import { Context } from "@oak/oak";
-
-const authService = new AuthService({
-  google: new GoogleAuthProvider(),
-  // github: new GithubAuthProvider(),
-}, new UserMemoryRespository());
+import { authService } from "./Auth.service.ts";
+import type { AuthProviderSource } from "#infrastructure/Auth/Auth.types.ts";
+import type {
+  AuthInfo,
+  AuthProvider,
+} from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
+import { parseAuthHeaders } from "#infrastructure/Auth/utils/parseAuthHeaders.ts";
+import type { Context } from "@oak/oak";
 
 export class AuthController {
-  static async signIn(ctx: Context) {
-    const data = await ctx.request.body.json();
-    const { provider, token } = data as { provider: string; token: string };
+  static async getAuthInfo(ctx: Context) {
+    const authProviders = authService.getProviders();
 
-    try {
-      const user = await authService.signIn(provider, token);
-      if (user) {
-        ctx.response.status = 200;
-        ctx.response.body = user;
-      } else {
-        ctx.response.status = 401;
-        ctx.response.body = { message: "Authentication failed" };
-      }
-    } catch (error) {
-      ctx.response.status = 400;
-      ctx.response.body = { message: error.message };
+    const authInfoEntries = await Promise.all(
+      Object.entries(authProviders)
+        .map(
+          async (
+            [provider, authProvider],
+          ) => [provider, await authProvider.getAuthInfo()],
+        ),
+    );
+
+    const authInfoMap = Object.fromEntries(authInfoEntries) as Record<
+      AuthProviderSource,
+      AuthInfo
+    >;
+
+    ctx.response.status = 200;
+    ctx.response.body = authInfoMap;
+  }
+
+  static async signIn(ctx: Context) {
+    const authHeadersResult = parseAuthHeaders(ctx);
+    if ("error" in authHeadersResult) {
+      ctx.response.status = 401;
+      ctx.response.body = { message: authHeadersResult.error };
+      return;
+    }
+
+    const { provider, token } = authHeadersResult;
+
+    const user = await authService.signIn(provider, token);
+    if (user) {
+      ctx.response.status = 200;
+      ctx.response.body = user;
+    } else {
+      ctx.response.status = 401;
+      ctx.response.body = { message: "Authentication failed" };
     }
   }
 }

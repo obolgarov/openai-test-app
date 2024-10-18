@@ -1,6 +1,6 @@
-import { User } from "../models/User.model.ts";
+import type { User } from "#infrastructure/Auth/entities/User.entity.ts";
 
 export interface UserRespository {
   findUserByEmail(email: string): Promise<User | null>;
-  saveUser(user: User): Promise<void>;
+  saveUser(email: string, userData: User): Promise<void>;
 }

@@ -1,32 +1,33 @@
-import { createGoogleOAuthConfig, createHelpers } from "@deno/kv-oauth";
-// import { AuthProvider } from "./Auth.provider.interface.ts";
-// import { User } from "../models/User.model.ts";
-import env from "#config/environment.ts";
+import type {
+  AuthInfo,
+  AuthProvider,
+} from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
+import type { User } from "#infrastructure/Auth/entities/User.entity.ts";
 
-const oAuthConfig = createGoogleOAuthConfig({
-  redirectUri: env.authClients.google.redirectUri,
-  scope: env.authClients.google.scope,
-});
+const GOOGLE_OPENID_CONFIG =
+  "https://accounts.google.com/.well-known/openid-configuration";
 
-console.log();
+export class GoogleAuthProvider implements AuthProvider {
+  private oAuthConfig = {};
 
-const {
-  signIn,
-  handleCallback,
-  getSessionId,
-  signOut,
-} = createHelpers(oAuthConfig);
+  private authInfo: AuthInfo = {};
 
-export class GoogleAuthProvider {
-  constructor() {
-    console.log(signIn, handleCallback, getSessionId, signOut);
+  async signIn(token: string) {
+    return await Promise.resolve(token);
   }
 
-  async signIn() {
+  async signOut() {
     return await Promise.resolve("poop");
   }
 
-  async signout() {
-    return await Promise.resolve("poop");
+  handleCallback(code: string): string {
+  }
+
+  async validateToken(token: string): Promise<User | null> {
+    fetch;
+  }
+
+  async getAuthInfo() {
+    return await Promise.resolve(this.authInfo);
   }
 }

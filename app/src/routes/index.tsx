@@ -6,7 +6,7 @@ export const handler: Handlers = {
    */
   GET: () => {
     const headers = new Headers();
-    headers.set("location", "/auth");
+    headers.set("Location", "/auth");
 
     return new Response(null, {
       status: 302,

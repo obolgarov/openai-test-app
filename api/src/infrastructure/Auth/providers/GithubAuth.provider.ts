@@ -1,6 +1,6 @@
 import { createGitHubOAuthConfig, createHelpers } from "@deno/kv-oauth";
 import { AuthProvider } from "./Auth.provider.interface.ts";
-import { User } from "../models/User.model.ts";
+import type { User } from "#infrastructure/Auth/entities/User.entity.ts";
 
 const oAuthConfig = createGitHubOAuthConfig();
 const {

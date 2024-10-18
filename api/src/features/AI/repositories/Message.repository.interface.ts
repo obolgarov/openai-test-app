@@ -1,4 +1,4 @@
-import type { User } from "#infrastructure/Auth/models/User.model.ts";
+import type { User } from "#infrastructure/Auth/entities/User.entity.ts";
 import type { AIChat } from "../models/AIChat.model.ts";
 import type { AIMessage } from "../models/AIMessage.model.ts";
 

@@ -6,6 +6,7 @@ const conf = await load({
 
 export default {
   server: {
+    env: conf.APP_ENV || "development",
     port: Number.parseInt(conf.PORT) || 8081,
   },
   authClients: {
