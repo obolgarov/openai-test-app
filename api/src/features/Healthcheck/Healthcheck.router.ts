@@ -4,7 +4,7 @@ import { withAuth } from "#infrastructure/Auth/Auth.middleware.ts";
 
 const router = new Router();
 
-router.post("/healthcheck", Healthcheck.healthcheck);
-router.post("/healthcheck/auth", withAuth(Healthcheck.authHealthcheck));
+router.get("/healthcheck", Healthcheck.healthcheck);
+router.get("/healthcheck/auth", withAuth(Healthcheck.authHealthcheck));
 
 export default router;

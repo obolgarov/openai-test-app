@@ -10,24 +10,33 @@ const GOOGLE_OPENID_CONFIG =
 export class GoogleAuthProvider implements AuthProvider {
   private oAuthConfig = {};
 
-  private authInfo: AuthInfo = {};
+  private authInfo?: AuthInfo;
 
-  async signIn(token: string) {
-    return await Promise.resolve(token);
+  signIn(token: string) {
+    return Promise.resolve(null);
   }
 
   async signOut() {
     return await Promise.resolve("poop");
   }
 
-  handleCallback(code: string): string {
+  handleCallback(code: string) {
+    return Promise.resolve("test");
   }
 
   async validateToken(token: string): Promise<User | null> {
-    fetch;
+    return await Promise.resolve(null);
   }
 
   async getAuthInfo() {
+    if (!this.authInfo) {
+      this.authInfo = {
+        loginUrl: "test",
+        logoutUrl: "test",
+        callbackUrl: "test",
+      };
+    }
+
     return await Promise.resolve(this.authInfo);
   }
 }

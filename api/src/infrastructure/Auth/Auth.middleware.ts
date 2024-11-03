@@ -12,9 +12,7 @@ export async function authMiddleware(ctx: Context, next: () => Promise<void>) {
   if ("error" in authHeadersResult) {
     return next();
   }
-
   const { provider, token } = authHeadersResult;
-
   try {
     const user = await authService.validateToken(provider, token);
     if (!user) {

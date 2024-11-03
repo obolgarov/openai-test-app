@@ -2,12 +2,19 @@ import { authService } from "./Auth.service.ts";
 import type { AuthProviderSource } from "#infrastructure/Auth/Auth.types.ts";
 import type {
   AuthInfo,
-  AuthProvider,
 } from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
 import { parseAuthHeaders } from "#infrastructure/Auth/utils/parseAuthHeaders.ts";
 import type { Context } from "@oak/oak";
 
 export class AuthController {
+  static async getAuthProdivers(ctx: Context) {
+    const authProviders = authService.getProviders();
+    const providerKeys = Object.keys(authProviders);
+
+    ctx.response.status = 200;
+    ctx.response.body = providerKeys;
+  }
+
   static async getAuthInfo(ctx: Context) {
     const authProviders = authService.getProviders();
 

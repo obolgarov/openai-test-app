@@ -4,9 +4,12 @@ import { UserRespository } from "./repositories/User.repository.interface.ts";
 import { UserMemoryRespository } from "#infrastructure/Auth/repositories/UserMemory.repository.ts";
 import { AuthProviderSource } from "#infrastructure/Auth/Auth.types.ts";
 import type { User } from "#infrastructure/Auth/entities/User.entity.ts";
+import type { AuthInfo } from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
 
 export type AuthServiceProviders = Readonly<
-  Record<AuthProviderSource, AuthProvider>
+  Partial<
+    Record<AuthProviderSource, AuthProvider>
+  >
 >;
 
 export class AuthService {
@@ -61,11 +64,30 @@ export class AuthService {
   saveUser(user: User) {
     const existingUser = this.userRepository.findUserByEmail(user.email);
 
-    this.userRepository.saveUser(user, email);
+    if (!existingUser) {
+      this.userRepository.saveUser(user.email, user);
+    }
   }
 
   validateCallbackcode(provider: AuthProvider, code: string) {
     return provider.handleCallback(code);
+  }
+
+  async getAllAuthInfo() {
+    const authInfoMap: Partial<Record<AuthProviderSource, AuthInfo>> = {};
+
+    await Promise.all(
+      Object.values(AuthProviderSource).map(
+        async (provider) => {
+          if (this.providers[provider]) {
+            authInfoMap[provider] = await this.providers[provider]
+              .getAuthInfo();
+          }
+        },
+      ),
+    );
+
+    return authInfoMap;
   }
 }
 
