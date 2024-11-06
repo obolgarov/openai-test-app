@@ -13,7 +13,6 @@ export default {
     google: {
       clientId: conf.GOOGLE_CLIENT_ID || "",
       clientSecret: conf.GOOGLE_CLIENT_SECRET || "",
-      redirectUri: conf.GOOGLE_REDIRECT_URI || "",
       scope: conf.GOOGLE_SCOPE || "",
     },
     facebook: {

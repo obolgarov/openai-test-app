@@ -8,6 +8,21 @@ export interface AuthenticatedContext<T extends Context = Context>
   };
 }
 
+export interface OpenIdConfig {
+  issuer: string;
+  authorization_endpoint: string;
+  revocation_endpoint?: string;
+  token_endpoint: string;
+  userinfo_endpoint?: string;
+  jwks_uri: string;
+  registration_endpoint?: string;
+  scopes_supported?: string[];
+  response_types_supported?: string[];
+  subject_types_supported: string[];
+  id_token_signing_alg_values_supported: string[];
+  claims_supported?: string[];
+}
+
 export const isAutheticatedContext = (
   ctx: Context | AuthenticatedContext,
 ): ctx is AuthenticatedContext =>
