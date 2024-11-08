@@ -1,6 +1,7 @@
-import type {
-  AuthInfo,
-  AuthProvider,
+import {
+  AuthType,
+  type OAuth2Info,
+  type OAuth2Provider,
 } from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
 import { OpenIdConfig } from "#infrastructure/Auth/Auth.types.ts";
 import environment from "#config/environment.ts";
@@ -9,17 +10,27 @@ import { assert } from "@std/assert";
 const GOOGLE_OPENID_CONFIG =
   "https://accounts.google.com/.well-known/openid-configuration";
 
-export class GoogleAuthProvider implements AuthProvider {
+export class GoogleAuthProvider implements OAuth2Provider {
   private openIdConfig?: OpenIdConfig;
-  private authInfo?: AuthInfo;
+  private authInfo?: OAuth2Info;
 
-  async getAuthInfo(): Promise<AuthInfo> {
+  async getAuthInfo() {
     if (!this.authInfo) {
+      const [authorizeUri, revokeUri] = await Promise.all([
+        this.getAuthorizeUri(),
+        this.getRevokeUri(),
+      ]);
+
       this.authInfo = {
-        authorizeUri: await this.getAuthorizeUri(),
-        revokeUri: await this.getRevokeUri(),
-      } as AuthInfo;
+        type: AuthType.OAuth2,
+        authorizeUri,
+        revokeUri,
+      };
     }
+
+    assert(this.authInfo.type);
+    assert(this.authInfo.authorizeUri);
+    assert(this.authInfo.revokeUri);
 
     return this.authInfo;
   }
@@ -45,6 +56,8 @@ export class GoogleAuthProvider implements AuthProvider {
   }
 
   private async getAuthorizeUri() {
+    assert(environment.authClients.google.clientId);
+
     const config = await this.getOpenIdConfig();
     assert(
       config.authorization_endpoint,

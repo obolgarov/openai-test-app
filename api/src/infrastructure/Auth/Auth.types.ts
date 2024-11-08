@@ -1,5 +1,5 @@
-import { Application, Context } from "@oak/oak";
-import type { User } from "#infrastructure/Auth/models/User.model.ts";
+import { Context } from "@oak/oak";
+import { User } from "#infrastructure/Auth/entities/User.entity.ts";
 
 export interface AuthenticatedContext<T extends Context = Context>
   extends Context {

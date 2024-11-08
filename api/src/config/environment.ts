@@ -11,9 +11,8 @@ export default {
   },
   authClients: {
     google: {
-      clientId: conf.GOOGLE_CLIENT_ID || "",
-      clientSecret: conf.GOOGLE_CLIENT_SECRET || "",
-      scope: conf.GOOGLE_SCOPE || "",
+      clientId: conf.GOOGLE_OAUTH_CLIENT_ID || "",
+      clientSecret: conf.GOOGLE_OAUTH_CLIENT_SECRET || "",
     },
     facebook: {
       clientId: conf.FACEBOOK_CLIENT_ID || "",

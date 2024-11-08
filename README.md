@@ -37,3 +37,5 @@ New stuff I tried out:
 - AI chatbot (OpenAI, Github Copilot)
 - Fresh
 - Preact (pretty much just like React, but with "Signals")
+
+This project isn't meant to be best way to architect a project, but to practice certain tools and techniques.

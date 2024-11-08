@@ -1,7 +1,8 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "tasks": {
-    "dev": "deno run --allow-read --allow-env --allow-net  --allow-sys --unstable-kv --env  --watch ./mod.ts"
+    "dev": "deno run --allow-read --allow-env --allow-net  --allow-sys --unstable-kv --env  --watch ./mod.ts",
+    "test": "deno test --allow-read --allow-env"
   },
   "imports": {
     "#config/": "./src/config/",

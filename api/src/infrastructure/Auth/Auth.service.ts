@@ -24,35 +24,35 @@ export class AuthService {
     this.userRepository = userRepository;
   }
 
-  async signIn(provider: AuthProvider, token: string): Promise<User> {
-    const user = await provider.signIn(token);
-    if (!user) {
-      throw new Error("Invalid token");
-    }
-
-    return user;
+  getProviders(): AuthServiceProviders {
+    return this.providers;
   }
 
-  async validateToken(
-    authProvider: AuthProvider,
-    token: string,
-  ): Promise<User | null> {
-    const user = await authProvider.validateToken(token);
-    if (!user) {
-      throw new Error("Invalid token");
-    }
+  // async signIn(provider: AuthProvider, token: string): Promise<User> {
+  //   const user = await provider.signIn(token);
+  //   if (!user) {
+  //     throw new Error("Invalid token");
+  //   }
 
-    return user;
-  }
+  //   return user;
+  // }
+
+  // async validateToken(
+  //   authProvider: AuthProvider,
+  //   token: string,
+  // ): Promise<User | null> {
+  //   const user = await authProvider.validateToken(token);
+  //   if (!user) {
+  //     throw new Error("Invalid token");
+  //   }
+
+  //   return user;
+  // }
 
   getProvider(
     authProviderSource: AuthProviderSource,
   ): AuthProvider | undefined {
     return this.providers[authProviderSource];
-  }
-
-  getProviders(): AuthServiceProviders {
-    return this.providers;
   }
 
   parseTokenData(token: string) {
@@ -69,18 +69,19 @@ export class AuthService {
     }
   }
 
-  validateCallbackcode(provider: AuthProvider, code: string) {
-    return provider.handleCallback(code);
-  }
+  // validateCallbackCode(provider: AuthProvider, code: string) {
+  //   return provider.handleCallback(code);
+  // }
 
   async getAllAuthInfo() {
-    const authInfoMap: Partial<Record<AuthProviderSource, AuthInfo>> = {};
+    const authInfoMap: { [key in AuthProviderSource]?: AuthInfo } = {};
 
     await Promise.all(
-      Object.values(AuthProviderSource).map(
-        async (provider) => {
-          if (this.providers[provider]) {
-            authInfoMap[provider] = await this.providers[provider]
+      Object.keys(this.providers).map(
+        async (key) => {
+          const provider = this.providers[key as AuthProviderSource];
+          if (provider) {
+            authInfoMap[key as AuthProviderSource] = await provider
               .getAuthInfo();
           }
         },
