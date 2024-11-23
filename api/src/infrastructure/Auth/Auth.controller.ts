@@ -3,16 +3,15 @@ import type { AuthProviderSource } from "#infrastructure/Auth/Auth.types.ts";
 import type {
   AuthInfo,
 } from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
-import { parseAuthHeaders } from "#infrastructure/Auth/utils/parseAuthHeaders.ts";
-import type { Context } from "@oak/oak";
+import { Context } from "hono";
 
 export class AuthController {
-  static async getAuthProdivers(ctx: Context) {
+  static getAuthProdivers(ctx: Context) {
     const authProviders = authService.getProviders();
     const providerKeys = Object.keys(authProviders);
 
-    ctx.response.status = 200;
-    ctx.response.body = providerKeys;
+    ctx.status(200);
+    return ctx.json(providerKeys);
   }
 
   static async getAuthInfo(ctx: Context) {
@@ -32,27 +31,27 @@ export class AuthController {
       AuthInfo
     >;
 
-    ctx.response.status = 200;
-    ctx.response.body = authInfoMap;
+    ctx.status(200);
+    return ctx.json(authInfoMap);
   }
 
-  static async signIn(ctx: Context) {
-    const authHeadersResult = parseAuthHeaders(ctx);
-    if ("error" in authHeadersResult) {
-      ctx.response.status = 401;
-      ctx.response.body = { message: authHeadersResult.error };
-      return;
-    }
+  // static async signIn(ctx: Context) {
+  //   const authHeadersResult = parseAuthHeaders(ctx);
+  //   if ("error" in authHeadersResult) {
+  //     ctx.status(401);
+  //     ctx.json({ message: authHeadersResult.error });
+  //     return;
+  //   }
 
-    const { provider, token } = authHeadersResult;
+  //   const { provider, token } = authHeadersResult;
 
-    const user = await authService.signIn(provider, token);
-    if (user) {
-      ctx.response.status = 200;
-      ctx.response.body = user;
-    } else {
-      ctx.response.status = 401;
-      ctx.response.body = { message: "Authentication failed" };
-    }
-  }
+  //   const user = await authService.signIn(provider, token);
+  //   if (user) {
+  //     ctx.status(200);
+  //     ctx.json(user);
+  //   } else {
+  //     ctx.status(401);
+  //     ctx.json({ message: "Authentication failed" });
+  //   }
+  // }
 }

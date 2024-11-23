@@ -1,11 +1,12 @@
-import { Application } from "@oak/oak";
+import { Hono } from "hono";
+import { logger } from "hono/logger";
 
-import authRoutes from "#infrastructure/Auth/Auth.router.ts";
-import healthcheckRoutes from "./features/Healthcheck/Healthcheck.router.ts";
+import authRouter from "#infrastructure/Auth/Auth.router.ts";
+import healthcheckRouter from "./features/Healthcheck/Healthcheck.router.ts";
 
-const app = new Application();
-
-app.use(authRoutes.routes());
-app.use(healthcheckRoutes.routes());
+const app = new Hono()
+  .use(logger())
+  .route("/auth", authRouter)
+  .route("/healthcheck", healthcheckRouter);
 
 export default app;

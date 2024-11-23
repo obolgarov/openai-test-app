@@ -1,9 +1,9 @@
-import { Context } from "@oak/oak";
 import { User } from "#infrastructure/Auth/entities/User.entity.ts";
+import { Context } from "hono";
 
 export interface AuthenticatedContext<T extends Context = Context>
   extends Context {
-  state: T["state"] & {
+  var: T["var"] & {
     user: User;
   };
 }
@@ -23,16 +23,16 @@ export interface OpenIdConfig {
   claims_supported?: string[];
 }
 
+export enum AuthProviderSource {
+  Github = "github",
+  Google = "google",
+  Facebook = "facebook",
+}
+
 export const isAutheticatedContext = (
   ctx: Context | AuthenticatedContext,
 ): ctx is AuthenticatedContext =>
-  (ctx as AuthenticatedContext).state.user !== undefined;
-
-export enum AuthProviderSource {
-  Github = "Github",
-  Google = "Google",
-  Facebook = "Facebook",
-}
+  (ctx as AuthenticatedContext).var.user !== undefined;
 
 export const isAuthProviderSource = (
   value: string,

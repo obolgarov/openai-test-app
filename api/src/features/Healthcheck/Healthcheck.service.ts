@@ -1,5 +1,5 @@
 import environment from "#config/environment.ts";
-import type { User } from "#infrastructure/Auth/models/User.model.ts";
+import { User } from "#infrastructure/Auth/entities/User.entity.ts";
 
 export class HealthcheckService {
   generateHealthcheckResponse() {

@@ -1,10 +1,12 @@
-import { Router } from "@oak/oak";
-import { Healthcheck } from "./Healthcheck.controller.ts";
 import { withAuth } from "#infrastructure/Auth/Auth.middleware.ts";
+import { Hono } from "hono";
+import { HealthcheckController } from "./Healthcheck.controller.ts";
 
-const router = new Router();
+const healthcheckRouter = new Hono()
+  .get("/", HealthcheckController.healthcheck)
+  .get(
+    "/auth",
+    withAuth(HealthcheckController.authHealthcheck),
+  );
 
-router.get("/healthcheck", Healthcheck.healthcheck);
-router.get("/healthcheck/auth", withAuth(Healthcheck.authHealthcheck));
-
-export default router;
+export default healthcheckRouter;

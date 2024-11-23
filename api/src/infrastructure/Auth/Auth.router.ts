@@ -1,9 +1,8 @@
-import { Router } from "@oak/oak";
+import { Hono } from "hono";
 import { AuthController } from "./Auth.controller.ts";
 
-const router = new Router();
+const authRouter = new Hono()
+  .get("/info", AuthController.getAuthInfo);
+// router.post("/auth/signin", AuthController.signIn);
 
-router.get("/auth/info", AuthController.getAuthInfo);
-router.post("/auth/signin", AuthController.signIn);
-
-export default router;
+export default authRouter;
