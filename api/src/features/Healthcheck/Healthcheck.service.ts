@@ -6,7 +6,7 @@ export class HealthcheckService {
     return {
       env: environment.server.env,
       currentTime: new Date().toISOString(),
-      uptime: Deno.osUptime(),
+      uptime: Deno.osUptime()
     };
   }
 

@@ -12,6 +12,7 @@ export async function authMiddleware(ctx: Context, next: Next) {
     return next();
   }
   const { provider, token } = authHeadersResult;
+  
   try {
     // const user = await authService.validateToken(provider, token);
     const user = null;
