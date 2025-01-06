@@ -23,11 +23,18 @@ export interface OpenIdConfig {
   claims_supported?: string[];
 }
 
-export enum AuthProviderSource {
+// focusing on oauth2 providers for now,but this is to test other strategies in the same system
+export enum BaseAuthProviderSource {
+  Stub = "stub",
+}
+
+export enum OAuth2ProviderSource {
   Github = "github",
   Google = "google",
   Facebook = "facebook",
 }
+
+export type AuthProviderSource = BaseAuthProviderSource | OAuth2ProviderSource;
 
 export const isAutheticatedContext = (
   ctx: Context | AuthenticatedContext,
@@ -37,4 +44,9 @@ export const isAutheticatedContext = (
 export const isAuthProviderSource = (
   value: string,
 ): value is AuthProviderSource =>
-  Object.values(AuthProviderSource).includes(value as AuthProviderSource);
+  Object.values(BaseAuthProviderSource).includes(
+    value as BaseAuthProviderSource,
+  ) ||
+  Object.values(OAuth2ProviderSource).includes(
+    value as OAuth2ProviderSource,
+  );

@@ -11,16 +11,16 @@ export default {
   },
   authClients: {
     google: {
-      clientId: conf.GOOGLE_OAUTH_CLIENT_ID || "",
-      clientSecret: conf.GOOGLE_OAUTH_CLIENT_SECRET || "",
+      clientId: conf.GOOGLE_OICD_CLIENT_ID || "",
+      clientSecret: conf.GOOGLE_OICD_CLIENT_SECRET || "",
     },
     facebook: {
-      clientId: conf.FACEBOOK_CLIENT_ID || "",
-      clientSecret: conf.FACEBOOK_CLIENT_SECRET || "",
+      clientId: conf.FACEBOOK_OICD_CLIENT_ID || "",
+      clientSecret: conf.FACEBOOK_OICD_CLIENT_SECRET || "",
     },
     github: {
-      clientId: conf.GITHUB_CLIENT_ID || "",
-      clientSecret: conf.GITHUB_CLIENT_SECRET || "",
+      clientId: conf.GITHUB_OICD_CLIENT_ID || "",
+      clientSecret: conf.GITHUB_OICD_CLIENT_SECRET || "",
     },
   },
   openai: {

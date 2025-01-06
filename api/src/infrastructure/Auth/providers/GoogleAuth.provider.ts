@@ -5,7 +5,7 @@ import {
 } from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
 import { OpenIdConfig } from "#infrastructure/Auth/Auth.types.ts";
 import environment from "#config/environment.ts";
-import { assert } from "@std/assert";
+import { assert, assertThrows } from "@std/assert";
 
 const GOOGLE_OPENID_CONFIG =
   "https://accounts.google.com/.well-known/openid-configuration";
@@ -14,23 +14,30 @@ export class GoogleAuthProvider implements OAuth2Provider {
   private openIdConfig?: OpenIdConfig;
   private authInfo?: OAuth2Info;
 
+  type = AuthType.OAuth2;
+
+  scopes = ["openid", "email", "profile"];
+
   async getAuthInfo() {
     if (!this.authInfo) {
-      const [authorizeUri, revokeUri] = await Promise.all([
+      const [authorizeUri, revokeUri, tokenUri] = await Promise.all([
         this.getAuthorizeUri(),
         this.getRevokeUri(),
+        this.getTokenUri(),
       ]);
 
       this.authInfo = {
-        type: AuthType.OAuth2,
         authorizeUri,
         revokeUri,
+        tokenUri,
+        scopes: this.scopes,
       };
     }
 
-    assert(this.authInfo.type);
     assert(this.authInfo.authorizeUri);
     assert(this.authInfo.revokeUri);
+    assert(this.authInfo.tokenUri);
+    assert(this.authInfo.scopes);
 
     return this.authInfo;
   }
@@ -79,5 +86,12 @@ export class GoogleAuthProvider implements OAuth2Provider {
     assert(config.revocation_endpoint, "Google revocation endpoint not found");
 
     return config.revocation_endpoint;
+  }
+
+  private async getTokenUri() {
+    const config = await this.getOpenIdConfig();
+    assert(config.token_endpoint, "Google revocation endpoint not found");
+
+    return config.token_endpoint;
   }
 }

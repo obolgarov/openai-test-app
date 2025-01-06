@@ -4,43 +4,45 @@ import {
 } from "./Auth.types.ts";
 import { authService } from "./Auth.service.ts";
 import { parseAuthHeaders } from "./utils/parseAuthHeaders.ts";
-import { Context, Next } from "hono";
+import { Next } from "hono";
+import { createMiddleware } from "hono/factory";
 
-export async function authMiddleware(ctx: Context, next: Next) {
-  const authHeadersResult = parseAuthHeaders(ctx);
-  if ("error" in authHeadersResult) {
-    return next();
-  }
-  const { provider, token } = authHeadersResult;
-  
-  try {
-    // const user = await authService.validateToken(provider, token);
-    const user = null;
-    if (!user) {
+export const authMiddleware = createMiddleware(
+  async (ctx, next) => {
+    const authHeadersResult = parseAuthHeaders(ctx);
+    if ("error" in authHeadersResult) {
       return next();
     }
+    const { provider, token } = authHeadersResult;
 
-    ctx.set("user", user);
-    authService.saveUser(user);
-    await next();
-  } catch (error) {
-    console.error(error);
-    await next();
-  }
-}
+    try {
+      // const user = await authService.validateToken(provider, token);
+      const user = null;
+      if (!user) {
+        return next();
+      }
 
-export function withAuth(
+      ctx.set("user", user);
+      authService.saveUser(user);
+      await next();
+    } catch (error) {
+      console.error(error);
+      await next();
+    }
+  },
+);
+
+/**
+ * Makes sure given handler has authentication
+ */
+export const withAuth = (
   handler: (ctx: AuthenticatedContext, next?: Next) => Response,
-) {
-  return async (
-    ctx: Context,
-    next: Next,
-  ) => {
+) =>
+  createMiddleware(async (ctx, next) => {
     if (!isAutheticatedContext(ctx)) {
       ctx.status(401);
       return ctx.json({ message: "Unauthorized" });
     }
 
     return await handler(ctx, next);
-  };
-}
+  });

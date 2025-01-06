@@ -2,7 +2,10 @@ import { AuthProvider } from "./providers/Auth.provider.interface.ts";
 import { GoogleAuthProvider } from "#infrastructure/Auth/providers/GoogleAuth.provider.ts";
 import { UserRespository } from "./repositories/User.repository.interface.ts";
 import { UserMemoryRespository } from "#infrastructure/Auth/repositories/UserMemory.repository.ts";
-import { AuthProviderSource } from "#infrastructure/Auth/Auth.types.ts";
+import {
+  AuthProviderSource,
+  OAuth2ProviderSource,
+} from "#infrastructure/Auth/Auth.types.ts";
 import type { User } from "#infrastructure/Auth/entities/User.entity.ts";
 import type { AuthInfo } from "#infrastructure/Auth/providers/Auth.provider.interface.ts";
 
@@ -93,6 +96,6 @@ export class AuthService {
 }
 
 export const authService = new AuthService({
-  [AuthProviderSource.Google]: new GoogleAuthProvider(),
+  [OAuth2ProviderSource.Google]: new GoogleAuthProvider(),
   // github: new GithubAuthProvider(),
 }, new UserMemoryRespository());
