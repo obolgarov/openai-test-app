@@ -11,7 +11,8 @@
     "update": "deno run -A -r https://fresh.deno.dev/update .",
     "esm:add": "deno run -A https://esm.sh/v135 add",
     "esm:update": "deno run -A https://esm.sh/v135 update",
-    "esm:remove": "deno run -A https://esm.sh/v135 remove"
+    "esm:remove": "deno run -A https://esm.sh/v135 remove",
+    "generate-openapi-types": "chmod +x ./src/scripts/generate-openapi-types.sh && ./src/scripts/generate-openapi-types.sh"
   },
   "lint": {
     "rules": {
