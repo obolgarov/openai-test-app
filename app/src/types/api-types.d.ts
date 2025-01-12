@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/auth/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Simple data to show the system as working properly */
+        get: operations["getAuthInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/healthcheck": {
         parameters: {
             query?: never;
@@ -50,6 +67,45 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getAuthInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    json: {
+                        github?: {
+                            authorizeUri: string;
+                            revokeUri: string;
+                            tokenUri: string;
+                            scopes: string[];
+                        };
+                        google?: {
+                            authorizeUri: string;
+                            revokeUri: string;
+                            tokenUri: string;
+                            scopes: string[];
+                        };
+                        facebook?: {
+                            authorizeUri: string;
+                            revokeUri: string;
+                            tokenUri: string;
+                            scopes: string[];
+                        };
+                    };
+                };
+            };
+        };
+    };
     getHealthcheck: {
         parameters: {
             query?: never;

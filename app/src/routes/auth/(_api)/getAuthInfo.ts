@@ -1,5 +1,7 @@
 import environment from "#config/environment.ts";
-import { getAuthInfoData } from "#types/apiTypes.ts";
+import { paths } from "#types/api-types.d.ts";
+
+const x: paths["/auth/info"]["get"];
 
 export const getAuthInfo = async () => {
   const apiRoot = environment.app.api_url;
